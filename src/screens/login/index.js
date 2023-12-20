@@ -10,21 +10,21 @@ import {
   Keyboard,
   KeyboardAvoidingView,
 } from 'react-native';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux'; 
-import {TextInput, Snackbar, Button} from 'react-native-paper'; 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { TextInput, Snackbar, Button } from 'react-native-paper';
 const arms = require('../../../assets/arms.png');
 
 
-import allActions from '../../actions'; 
+import allActions from '../../actions';
 import Container from '../../ui/components/container';
-import {moderateScale} from 'react-native-size-matters';
-import {primary, accent} from '../../utilities/colors';
-import {withNetwork, post_call} from '../../services/network';
-import {storeLocalStorage} from '../../storage/db';
+import { moderateScale } from 'react-native-size-matters';
+import { primary, accent } from '../../utilities/colors';
+import { withNetwork, post_call } from '../../services/network';
+import { storeLocalStorage } from '../../storage/db';
 
 const theme = {
-  colors: {primary: accent, underlineColor: 'transparent'},
+  colors: { primary: accent, underlineColor: 'transparent' },
 };
 
 class Login extends React.Component {
@@ -38,28 +38,28 @@ class Login extends React.Component {
   };
 
   redirect(route) {
-    this.props.navigation.navigate(route, {is_guest: false});
+    this.props.navigation.navigate(route, { is_guest: false });
   }
 
   setShowPass = () => {
-    this.setState({showPass: !this.state.showPass});
+    this.setState({ showPass: !this.state.showPass });
   };
 
   closeSnackBar = () => {
-    this.setState({showSnack: !this.state.showSnack});
+    this.setState({ showSnack: !this.state.showSnack });
   };
 
   login = () => {
     if (!this.state.username) {
-      this.setState({message: 'Username is required', showSnack: true});
+      this.setState({ message: 'Username is required', showSnack: true });
       return;
     }
     if (!this.state.password) {
-      this.setState({message: 'Password is required', showSnack: true});
+      this.setState({ message: 'Password is required', showSnack: true });
       return;
     }
     Keyboard.dismiss();
-    this.setState({loading: true});
+    this.setState({ loading: true });
     withNetwork(
       () => {
         let input = {
@@ -71,7 +71,7 @@ class Login extends React.Component {
         post_call('users/login', null, input)
           .then((response) => {
             this.setState(
-              {username: null, password: null, loading: false},
+              { username: null, password: null, loading: false },
               () => {
                 if (response.data) {
                   const user = response.data.user;
@@ -102,7 +102,7 @@ class Login extends React.Component {
           });
       },
       () => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
       },
     );
   };
@@ -139,7 +139,7 @@ class Login extends React.Component {
                   label="Username"
                   placeholder="Username"
                   value={this.state.username}
-                  onChangeText={(username) => this.setState({username})}
+                  onChangeText={(username) => this.setState({ username })}
                 />
 
                 <TextInput
@@ -147,7 +147,7 @@ class Login extends React.Component {
                   mode="outlined"
                   label="Password"
                   secureTextEntry={!this.state.showPass}
-                  onChangeText={(password) => this.setState({password})}
+                  onChangeText={(password) => this.setState({ password })}
                   right={
                     <TextInput.Icon
                       name={this.state.showPass ? 'eye' : 'eye-off'}
@@ -181,7 +181,7 @@ class Login extends React.Component {
               </View>
             </KeyboardAvoidingView>
           </View>
-        </View> 
+        </View>
         <Snackbar
           duration={5000}
           visible={this.state.showSnack}
@@ -261,6 +261,7 @@ const styles = StyleSheet.create({
   },
   textRegisterMsg: {
     fontSize: moderateScale(14),
+    color: accent
   },
   textRegister: {
     fontSize: moderateScale(16),

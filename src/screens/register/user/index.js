@@ -23,7 +23,7 @@ const theme = {
   colors: {primary: accent, underlineColor: 'transparent'},
 };
 
-export default class Login extends React.Component {
+export default class User extends React.Component {
   state = {
     username: '',
     name: '',
@@ -324,5 +324,6 @@ const styles = StyleSheet.create({
   },
   textLoginMsg: {
     fontSize: moderateScale(14),
+    color:accent
   },
 });

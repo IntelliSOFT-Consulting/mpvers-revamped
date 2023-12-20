@@ -9,21 +9,21 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
-import {CommonActions} from '@react-navigation/routers';
-import {List, TextInput, Snackbar, Button, Checkbox} from 'react-native-paper';
+import { CommonActions } from '@react-navigation/routers';
+import { List, TextInput, Snackbar, Button, Checkbox } from 'react-native-paper';
 import DropDown from 'react-native-paper-dropdown';
-import {moderateScale} from 'react-native-size-matters';
+import { moderateScale } from 'react-native-size-matters';
 import {
   withNetwork,
   networkCall,
   post_call,
 } from '../../../services/network';
-import Container from '../../../storage/db';
-import {accent, green} from '../../../utilities/colors';
-import {fetchLocalStorage} from '../../../storage/db';
+import Container from '../../../ui/components/container';
+import { accent, green } from '../../../utilities/colors';
+import { fetchLocalStorage } from '../../../storage/db';
 
 const theme = {
-  colors: {primary: accent, underlineColor: 'transparent'},
+  colors: { primary: accent, underlineColor: 'transparent' },
 };
 
 export default class Institution extends React.Component {
@@ -63,21 +63,21 @@ export default class Institution extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({user_details: nextProps.route.params.user_params});
+    this.setState({ user_details: nextProps.route.params.user_params });
   }
 
   loadData = () => {
     fetchLocalStorage('counties').then((data) => {
-      this.setState({countyList: data});
+      this.setState({ countyList: data });
     });
   };
 
   openCloseMenu = () => {
-    this.setState({countyDropdown: !this.state.countyDropdown});
+    this.setState({ countyDropdown: !this.state.countyDropdown });
   };
 
   closeSnackBar = () => {
-    this.setState({showSnack: !this.state.showSnack});
+    this.setState({ showSnack: !this.state.showSnack });
   };
 
   humanize(num) {
@@ -113,7 +113,7 @@ export default class Institution extends React.Component {
     let num1 = Math.floor(Math.random() * 10 + 1);
     let num2 = Math.floor(Math.random() * 10 + 1);
     let sum = num1 + num2;
-    this.setState({codeChallenge: [num1, this.humanize(num2), sum]});
+    this.setState({ codeChallenge: [num1, this.humanize(num2), sum] });
   }
 
   setValue(callback) {
@@ -126,7 +126,7 @@ export default class Institution extends React.Component {
     this.validateRegister();
 
     Keyboard.dismiss();
-    this.setState({loading: true});
+    this.setState({ loading: true });
     withNetwork(
       () => {
         let user = {
@@ -154,7 +154,7 @@ export default class Institution extends React.Component {
 
         post_call('users/register', null, user)
           .then((response) => {
-            this.setState({loading: false});
+            this.setState({ loading: false });
             if (response.data.status === 'success') {
               this.setState({
                 message:
@@ -164,7 +164,7 @@ export default class Institution extends React.Component {
               setTimeout(() => {
                 const resetAction = CommonActions.reset({
                   index: 0,
-                  routes: [{name: 'Login'}],
+                  routes: [{ name: 'Login' }],
                 });
                 this.props.navigation.dispatch(resetAction);
               }, 5000);
@@ -183,7 +183,7 @@ export default class Institution extends React.Component {
             }
           })
           .catch((error) => {
-            this.setState({loading: false});
+            this.setState({ loading: false });
             this.setState({
               message: 'Sorry, account could not be registered.',
               showSnack: true,
@@ -191,7 +191,7 @@ export default class Institution extends React.Component {
           });
       },
       () => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
       },
     );
   };
@@ -200,43 +200,43 @@ export default class Institution extends React.Component {
     let reg = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
     if (!this.state.user_details?.username) {
-      this.setState({message: 'Username is required', showSnack: true});
+      this.setState({ message: 'Username is required', showSnack: true });
       return;
     }
     if (
       !this.state.user_details?.password ||
       !this.state.user_details?.confirm_password
     ) {
-      this.setState({message: 'Password is required', showSnack: true});
+      this.setState({ message: 'Password is required', showSnack: true });
       return;
     }
     if (
       this.state.user_details?.password !==
       this.state.user_details?.confirm_password
     ) {
-      this.setState({message: "Passwords don't match", showSnack: true});
+      this.setState({ message: "Passwords don't match", showSnack: true });
       return;
     }
     if (!this.state.user_details?.name) {
-      this.setState({message: 'Name is required', showSnack: true});
+      this.setState({ message: 'Name is required', showSnack: true });
       return;
     }
     if (!this.state.user_details?.email) {
-      this.setState({message: 'User email is required', showSnack: true});
+      this.setState({ message: 'User email is required', showSnack: true });
       return;
     }
     if (reg.test(this.state.user_details?.email) === false) {
-      this.setState({message: 'User email is not valid', showSnack: true});
+      this.setState({ message: 'User email is not valid', showSnack: true });
       return;
     }
 
     if (this.state.showCompanyEmail && !this.state.company_email) {
-      this.setState({message: 'Company email is required', showSnack: true});
+      this.setState({ message: 'Company email is required', showSnack: true });
       return;
     }
 
     if (!this.state.code_answer) {
-      this.setState({message: 'Code challenge is required', showSnack: true});
+      this.setState({ message: 'Code challenge is required', showSnack: true });
       return;
     }
 
@@ -263,7 +263,7 @@ export default class Institution extends React.Component {
         });
       });
     } else {
-      this.setState({instituteList: [], showList: false});
+      this.setState({ instituteList: [], showList: false });
     }
   };
 
@@ -312,7 +312,7 @@ export default class Institution extends React.Component {
                     });
                   }}
                 />
-                <Text>Are you reporting for market authority?</Text>
+                <Text style={styles.viewCompanyEmail}>Are you reporting for market authority?</Text>
               </View>
 
               {this.state.showCompanyEmail && (
@@ -322,7 +322,7 @@ export default class Institution extends React.Component {
                   label="Company Email *"
                   placeholder="Company Email *"
                   value={this.state.company_email}
-                  onChangeText={(text) => this.setState({company_email: text})}
+                  onChangeText={(text) => this.setState({ company_email: text })}
                 />
               )}
               <TextInput
@@ -332,7 +332,7 @@ export default class Institution extends React.Component {
                 placeholder="Institution Name"
                 value={this.state.institution_name}
                 onChangeText={(text) => {
-                  this.setState({institution_name: text});
+                  this.setState({ institution_name: text });
                   this.searchChangeText(text);
                 }}
               />
@@ -347,7 +347,7 @@ export default class Institution extends React.Component {
                           onPress={() => {
                             Keyboard.dismiss();
                             this.setInstitute(institute);
-                            this.setState({showList: false});
+                            this.setState({ showList: false });
                           }}
                         />
                       );
@@ -363,7 +363,7 @@ export default class Institution extends React.Component {
                 keyboardType="email-address"
                 value={this.state.institution_email}
                 onChangeText={(text) =>
-                  this.setState({institution_email: text})
+                  this.setState({ institution_email: text })
                 }
               />
               <TextInput
@@ -375,7 +375,7 @@ export default class Institution extends React.Component {
                 returnKeyType="done"
                 value={this.state.institution_contacts}
                 onChangeText={(text) =>
-                  this.setState({institution_contacts: text})
+                  this.setState({ institution_contacts: text })
                 }
               />
 
@@ -386,7 +386,7 @@ export default class Institution extends React.Component {
                 placeholder="Institution Address"
                 value={this.state.institution_address}
                 onChangeText={(text) =>
-                  this.setState({institution_address: text})
+                  this.setState({ institution_address: text })
                 }
               />
               <DropDown
@@ -397,7 +397,7 @@ export default class Institution extends React.Component {
                 onDismiss={() => this.openCloseMenu()}
                 value={this.state.county}
                 setValue={(county) => {
-                  this.setState({county: county});
+                  this.setState({ county: county });
                 }}
                 list={this.state.countyList}
               />
@@ -411,7 +411,7 @@ export default class Institution extends React.Component {
                     label="Code Challenge *"
                     placeholder="Sum"
                     value={this.state.code_answer}
-                    onChangeText={(text) => this.setState({code_answer: text})}
+                    onChangeText={(text) => this.setState({ code_answer: text })}
                     left={<TextInput.Affix text="=" />}
                     style={styles.textInputChallenge}
                     keyboardType={'numeric'}
@@ -476,6 +476,7 @@ const styles = StyleSheet.create({
   viewCompanyEmail: {
     flexDirection: 'row',
     alignItems: 'center',
+    color:accent
   },
   buttonDesignation: {
     height: moderateScale(50),
@@ -499,6 +500,7 @@ const styles = StyleSheet.create({
   textChallenge: {
     width: '30%',
     fontSize: moderateScale(15),
+    color:accent
   },
   textInputChallenge: {
     width: '70%',
@@ -510,6 +512,7 @@ const styles = StyleSheet.create({
   },
   textLoginMsg: {
     fontSize: moderateScale(14),
+    color: accent
   },
   listFacilities: {
     elevation: 3,
